@@ -1,0 +1,9 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#fff"/>
+  <rect x="30" y="30" width="140" height="140" rx="20" ry="20" fill="#3B5998"/>
+  <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-family="Montserrat" font-size="120" font-weight="600" width="80">L</text>
+  <text x="50%" y="74%" dominant-baseline="middle" text-anchor="middle">
+    <tspan fill="#fff" letter-spacing="2px" font-family="Montserrat" font-size="28" x="60%" text-anchor="middle" width="140">engua</tspan>
+  </text>
+  <text fill="#fff" x="52%" y="22%" dominant-baseline="middle" text-anchor="middle" font-family="Montserrat" font-size="10" font-weight="900" font-style="italic">© DOKRAM s.r.o.</text>
+</svg>

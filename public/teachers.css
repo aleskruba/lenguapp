@@ -1,0 +1,444 @@
+.TeacherMainDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.findTeacher{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+.teacherFilter{
+display: flex;
+justify-content: center;
+
+}
+
+.languageListFilter {
+    background-color: white;
+    position: absolute;
+    margin-top: 20px;
+}
+
+
+.list-items-languages-Filter{
+    font-size: 12px;
+
+}
+.mainUl {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    gap: 100px; /* set the desired gap value */
+  
+}
+
+.teacher {
+    position: relative;
+}
+.teacher-menu {
+    display: none;
+    position: absolute;
+    width: 250px;
+    left: 0;
+    top: 100%;
+    z-index: 1;
+}
+.teacher:hover > .teacher-menu {
+    display: block;
+}
+.teacher-menuLI{
+    margin-bottom: 15px;
+    padding-top: 5px;
+}
+
+.lessons {
+    position: relative;
+}
+.lessons-menu {
+    display: none;
+    position: absolute;
+    width: 250px;
+    left: 0;
+    top: 100%;
+    z-index: 1;
+}
+
+
+.lessons:hover > .lessons-menu {
+    display: block;
+}
+
+
+
+
+.wrapper{
+    position: relative;
+    display: flex;
+    width: 35vmin;
+    padding: 5px 4px 2px 4px;
+
+}
+
+.container { 
+    position: relative;
+    min-width: 100%;
+    height: 50px;
+    margin-top: 10px;
+}
+input[type="range"]{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    outline: none;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    background-color: transparent;
+    pointer-events: none;
+}
+
+.slider-track{
+   width: 100%;
+    height: 5px;
+    position: absolute;
+    /* background-color: #d5d5d5; */
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    border-radius: 5px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track{
+    -webkit-appearance: none;
+    height: 5px;
+}
+
+input[type="range"]::-moz-range-track{
+    -moz-appearance: none;
+    height: 5px;
+}
+
+
+input[type="range"]::-ms-track{
+    appearance: none;
+    height: 5px;
+}
+
+
+input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+   height: 1em;
+   width: 1em;
+   background-color: #326;
+   cursor: pointer;
+   border-radius: 10px;
+   pointer-events: auto;
+   margin-top: -9px;
+   pointer-events: auto;
+}
+
+
+input[type="range"]::-moz-range-thumb{
+    -webkit-appearance: none;
+    height: 1em;
+    width: 1em;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #326;
+    pointer-events: auto;
+}
+
+
+input[type="range"]::-ms-thumb{
+    appearance: none;
+    height: 1em;
+    width: 1em;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #326;
+    pointer-events: auto;
+}
+
+input[type="range"]:active::-webkit-slider-thumb{
+    background-color: #ffffff;
+    border: 3px solid #326
+}
+
+.values{
+    background-color: #326;
+    min-width: 50%;
+    position: relative;
+    margin: auto;
+    padding: 10px ;
+    margin-right: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 15px;
+    color:#ffffff
+}
+
+.value:before{
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-top: 15px solid #326;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    margin: auto;
+    bottom: -14px;
+    left: 0;
+    right:0
+
+}
+
+/*  teacher list   */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.teachersList{
+    margin-top: 60px;
+}
+
+.main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+
+.profileTeacherList{
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.box{
+    background-color: #eeebeb;
+    display: flex;
+    border-radius: 10px;
+    margin-left: 10px;
+    height: 230px;
+    width: 460px;
+    padding-left: 10px;
+
+}
+
+.iframeVideo{
+    display: flex;
+    height: 180px;
+    border-radius: 5px;
+}
+
+.leftSide{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex:1.5;
+    }
+
+.imageDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60%;
+}
+
+.imageDivCircle {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.imageDivCircle img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 150%;
+    max-height: 150%;
+    object-fit: cover;
+}
+
+
+
+.ranking{
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    color: #FFD700;
+    justify-content: center;
+    width: 100%;
+    height: 10%;
+  
+}
+
+.LessnonsSumber{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    font-size: 13px;
+}
+
+
+.rightSide {
+    flex: 5;
+    width: auto;
+    min-width: 250px;
+    max-width: 700px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+
+.name{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    height: 20%;
+    font-size: 25px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.nametaxt{
+    color:  black;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.nametaxtSpan{
+    color:gray;
+}
+
+.tutor{
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    height: 10%;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+}
+
+.teachLanguages{
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    height: 20%;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.about {
+    padding-left: 10px;
+    display: flex;
+     height: 100px;
+    font-size: 15px;
+    height: 40%;
+    overflow: auto;
+     text-overflow: ellipsis;
+}
+
+/* Customize the scroll bar */
+.about::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .about::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .about::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  .about::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+
+.player{
+    margin-left: 10px;
+    border-radius: 10px;
+    width: 450px;
+    height: 260px;
+  
+}
+
+.input-container {
+    position: relative;
+    background-color:white;
+    width: 10em;
+    height: 2.0em;
+    border-radius: 5px;
+}
+
+.LanguageInput{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    color:#000000;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 0 17px;
+    z-index: 5;
+}
+
+#suggestion{
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    z-index: 2;
+    top:0;
+    left:0;
+    display: flex;
+    align-items: center;
+    padding: 0 17px;
+    font-size: 17px;
+    color:#868686;
+
+}
+
+@media screen and (max-width:600px){
+    .input-container{
+        width: 80xw;
+    }
+    
+}
+
+@media only screen and (max-width: 768px) {
+
+    .mainUl {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        gap: 100px; /* set the desired gap value */
+      
+    }
+    .player {
+        margin-top: 20px;
+        
+          
+      }
+
+  }
+  

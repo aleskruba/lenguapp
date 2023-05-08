@@ -1,0 +1,302 @@
+<%- include('partials/header'); -%>
+
+<div class="updateteacherZoneContainer">
+  <div class="updateteacherZoneUpper"> 
+
+    <div class="teacherZoneSchedule" onclick="navigateToTeacher('teacherzone/schedule')" style="cursor: pointer;">
+       <h2>Create your schedule slots
+      </h2>
+    </div>
+  </div>
+
+  <div class="updateteacherZoneMain">
+  <div class="updateteacherZoneMainleftSide">
+     <form class="updateteacherloginForm" autocomplete="off">
+
+       <div class="hidingInputDiv">
+      <label for="teachingLanguage">Select teaching languages , max two</label>
+      <input type="text"  id="languageTeachInput" class='languageTeachInput' value="" name="teachlang" />
+      </div>
+      <div class="teachingLanguageError"></div>
+      <ul class="list"></ul>
+
+      <div class="LanguagesDIV">
+        <ul class="updateLanguagesTeachDiv">
+
+     
+       </ul>
+    </div>
+    <ul class="languageTeachList"> </ul>
+
+      <label for="profileText">Enter your presentation</label>
+      <div class="updateteacherPresentationTextarea">
+        <textarea name="profileText" id="" cols="30" rows="20" class="saveTeachText" placeholder="Enter your text here"><%= user.profileText %></textarea>
+      </div>
+
+
+      <label for="profileVideo">Enter your video presentation</label>
+      <input
+        type="text"
+        id="input"
+        name="profileVideo"
+        class="countryInput"
+        value="<%= user.profileVideo %>"
+      />
+      <div class="videoPresentationError"></div>
+
+      <label for="tax">Enter your hourly tax</label>
+      <input
+        type="text"
+        name="tax"
+        id="phoneInput"
+        class="countryPhoneInput"
+        value="<%= user.tax %>"
+      />
+      <div class="teachingTaxError"></div>
+
+      <input
+        type="submit"
+        name=""
+        class="loginBtn"
+        id=""
+        value="Update"
+        style="margin-top: 60px"
+      />
+      <input
+        type="button"
+        name=""
+        class="cancelBtn"
+        id=""
+        value="Cancel"
+        style="margin-top: 10px"
+        onclick="location.assign('/profile')"
+      />
+    </form>
+  </div>
+
+  <div class="updateteacherZoneMainRightSide">
+
+      <div class="adviseDiv">
+        <div class="adviseDivTitle">
+         <p> What steps can you take to become an effective language teacher?
+        </p>
+        </div>
+        <div class="adviseDivContent">
+          <ol>
+            <li>
+              Master the language you want to teach: As a language teacher, it's important to have a deep understanding and knowledge of the language you are teaching. This includes grammar, vocabulary, pronunciation, and other nuances of the language.
+            </li>
+          <li>
+            Develop teaching skills: Teaching is a skill that can be learned and developed. Consider enrolling in a teaching course or attending workshops and seminars to improve your teaching skills.
+          </li>
+
+          <li>
+            Plan and prepare well: Effective lesson planning and preparation can help you deliver clear and engaging lessons. Plan your lessons carefully and consider the needs and learning styles of your students.
+          </li>
+          <li>
+            Engage your students: Engaging your students in the learning process can make the learning experience more enjoyable and effective. Use a variety of teaching methods, such as games, role-plays, and group discussions to make your lessons more interesting.
+          </li>
+          <li>Provide feedback: Feedback is essential for language learners to improve their skills. Provide constructive feedback to your students regularly, and encourage them to reflect on their progress and identify areas for improvement.</li>
+        <li>
+          Continuously learn and improve: As a language teacher, you should continuously learn and improve your teaching skills and knowledge. Attend training programs and workshops, read professional literature, and keep up with the latest teaching methodologies and technologies.
+        </li>  
+        </ol>
+        </div>
+      
+
+      </div>
+  </div>
+</div>
+
+
+</div>
+<%- include('partials/footer'); -%>
+
+<script>
+const languages = JSON.parse('<%- languages %>');
+const languageTeachInput = document.querySelector('.languageTeachInput')
+const languageTeachList = document.querySelector(".languageTeachList")
+const LanguageArray = []
+const updateLanguagesTeachDiv = document.querySelector('.updateLanguagesTeachDiv')
+const teachingTaxError = document.querySelector('.teachingTaxError')
+
+
+document.addEventListener("click", function (event) {
+  const isClickInsideLanguageTeachlist = languageTeachInput.contains(event.target);
+  if (!isClickInsideLanguageTeachlist) {
+    // Clicked outside the languageTeachlist, so hide the languageTeachlistDIV
+    languageTeachList.style.display = "none";
+  }else{
+    languageTeachList.style.display = "block";
+  }
+});
+
+
+async function fetchData() {
+  const response = await fetch('/getTeachLanguage')
+  const data = await response.json()
+  
+  data.teachlang.forEach(e => {
+    LanguageArray.push(e)
+    
+  })
+
+
+  if (LanguageArray.length === 2) {
+    // Disable the input field if the LanguageArrayay now has 2 elements
+    languageTeachInput.disabled = true
+  }
+  updateLanguagesTeachDiv.innerHTML = '';
+
+  LanguageArray.forEach((lang,index) => {
+              const listItem = document.createElement('li');
+              listItem.classList.add('teachingLanguagesLi')
+              listItem.innerHTML = lang;
+              const newDiv = document.createElement('div')
+              newDiv.classList.add('newDiv')
+              const trash = document.createElement('span')
+              trash.classList.add('sampah')
+              const nextspan = document.createElement('span')
+              trash.appendChild(nextspan)
+              const i = document.createElement('i')
+              trash.appendChild(i)
+              newDiv.appendChild(trash)
+              listItem.appendChild(newDiv) 
+              updateLanguagesTeachDiv.appendChild(listItem);
+              languageTeachInput.value = ""
+             
+                newDiv.addEventListener('click', () => {
+                LanguageArray.splice(index, 1) // Remove the corresponding language from the array
+                updateList() // Update the list to reflect the changes
+                languageTeachInput.disabled = false // Enable the input field if it was disabled
+                          }) 
+     
+        });
+  return data // return the data object
+}
+
+// Usage:
+fetchData()
+
+
+
+function updateList() {
+  // Clear the current contents of the ul element
+  updateLanguagesTeachDiv.innerHTML = '';
+
+  // Add new li elements for each item in the LanguageArrayay
+  LanguageArray.forEach((lang,index) => {
+              const listItem = document.createElement('li');
+              listItem.classList.add('teachingLanguagesLi')
+              listItem.innerHTML = lang;
+              const newDiv = document.createElement('div')
+              newDiv.classList.add('newDiv')
+              const trash = document.createElement('span')
+              trash.classList.add('sampah')
+              const nextspan = document.createElement('span')
+              trash.appendChild(nextspan)
+              const i = document.createElement('i')
+              trash.appendChild(i)
+              newDiv.appendChild(trash)
+              listItem.appendChild(newDiv) 
+              updateLanguagesTeachDiv.appendChild(listItem);
+              languageTeachInput.value = ""
+    
+     
+           
+              newDiv.addEventListener('click', () => {
+                LanguageArray.splice(index, 1) // Remove the corresponding language from the array
+                updateList() // Update the list to reflect the changes
+                languageTeachInput.disabled = false // Enable the input field if it was disabled
+
+              })
+
+      });
+}
+
+
+languageTeachInput.addEventListener("keyup", e => {
+    removeElements();
+ 
+    for (let i of languages.languages) {
+      if (i.name.toLowerCase().startsWith(languageTeachInput.value.toLowerCase()) && languageTeachInput.value !== "") {
+        const listItem = document.createElement("li");
+        listItem.classList.add("list-items-languages-teach");
+        listItem.style.cursor = "pointer";
+        listItem.addEventListener("click", () => displayNames(i.name));
+        const word = "<b>" + i.name.substr(0, languageTeachInput.value.length) + "</b>" + i.name.substr(languageTeachInput.value.length);
+        listItem.innerHTML = word;
+        document.querySelector(".languageTeachlist").appendChild(listItem);
+
+      }
+    }
+  });
+
+    function removeElements() {
+    const items = document.querySelectorAll('.list-items-languages-teach');
+    items.forEach(item => item.remove());
+  }
+
+
+async function displayNames(value) {
+
+
+      LanguageArray.push(value)
+      updateList()
+      if (LanguageArray.length >= 2) {
+        // Disable the input field if the array already has 2 elements
+        languageTeachInput.disabled = true
+        languageTeachInput.value = ""
+        return
+  }
+
+   
+
+ 
+    const hidingInputDiv = document.querySelector('.hidingInputDiv')
+    // Disable the languageTeachInput element if two languages have been selected
+    if (LanguageArray.length == 2) {
+      languageTeachInput.disabled = true;
+      hidingInputDiv.style.display = "none";
+    }
+  }
+    
+
+  const form = document.querySelector('form');
+  form.addEventListener('submit', async function (event) {
+   event.preventDefault();
+
+  const profileText = form.profileText.value;
+  const profileVideo = form.profileVideo.value;
+  const tax = form.tax.value;
+
+  const body = { LanguageArray, profileText, profileVideo, tax };
+
+  if (tax > 30) {
+    teachingTaxError.innerHTML = 'max $30 amigo'
+
+  }else {
+  try {
+    const res = await fetch('/teacherZoneUpdate', {
+      
+      method: 'PUT',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+      location.assign('/profile');
+  
+  }
+  catch (err) {
+    console.log('error', err);
+  }
+
+  }
+
+});
+
+function navigateToTeacher(teacherId) {
+                  window.location.href = `/teacherzoneupdate/schedule`;
+                }
+
+</script>

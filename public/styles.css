@@ -1,0 +1,876 @@
+/* google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+body{
+  margin-top: 160px;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  background: #fafafa;
+}
+h1, h2, h3, h4, ul, li, a, p, input, label, button, div, footer{
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', sans-serif;
+  color: #444;
+}
+ul{
+  list-style-type: none;
+}
+a{
+  text-decoration: none;
+}
+.headerNav {
+  top: 0;
+  position: absolute;
+  display: flex;
+}
+
+ .leftSize{
+ 
+    flex: 1;
+ }
+ .LogoPNG{
+    margin-top: -15px;
+    margin-bottom: -15px;
+    
+ }
+
+ .greet{
+  margin-top: 7px;
+  font-style: italic;
+  margin-left: 200px;
+ }
+
+ .rightSize{
+     display: flex;
+    padding-top: 15px;
+    padding-right: 20px;
+}
+
+nav ul{
+  display: flex;
+   
+}
+
+nav li a{
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+
+nav li a:hover{
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  color: gray;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+
+.teacherZoneMenu nav li{
+color:red;
+}
+
+.numberOfTeachersDiv{
+
+  margin-top: 50px;
+}
+
+.profile{
+  position: relative;
+}
+
+.profile-menu {
+  display: none;
+  background-color: white;
+  position: absolute;
+  width: 250px;
+  left: -20px;
+  z-index: 1;
+}
+
+.profile:hover >.profile-menu {
+  display: block;
+}
+
+
+
+.profilePage{
+  margin-top: 100px;
+}
+
+
+
+form h2{
+  font-size: 2.4em;
+  font-weight: 900;
+  margin-bottom: 40px;
+}
+
+form{
+  width: 360px;
+  margin: 0 auto;
+  padding: 30px;
+  box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  background: white;
+}
+input{
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+  width: 100%;
+}
+label{
+  display: block;
+  margin: 20px 0 10px;
+}
+button{
+  margin-top: 30px;
+  border-radius: 36px;
+  background: #FEE996;
+  border:0;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+
+.updateButton{
+  width: 300px;
+  display: flex;
+  justify-content: center;
+ }
+
+ 
+.resetButton{
+  width: 300px;
+  display: flex;
+  justify-content: center;
+ }
+
+ .btnStart{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 45px;
+  background-color: #FEE996;
+}
+
+.btnStart-cancel{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 45px;
+  background-color: lightgrey;
+}
+.btnStart-policy{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 45px;
+  color: white;
+  background-color: lightcoral;
+}
+
+
+.btnReset{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 45px;
+  background-color: #cf7b7b;
+}
+
+
+.error{
+  color: #ff0099;
+  margin: 10px 2px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+header{
+  display: flex;
+  align-items: center;
+}
+header img{
+  width: 250px;
+  margin-right: 40px;
+}
+header h2{
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+header h3{
+  font-size: 1.6em;
+  margin-bottom: 10px;
+  margin-left: 2px;
+  color: #999;
+}
+header .btn{
+  margin-top: 20px;
+  padding: 12px 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 0.8em;
+}
+.profilePage{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.leftSideProfile{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex:1; 
+}
+
+ 
+.ProfileUl{
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 30px;
+  row-gap: 30px;
+  max-width: 1200px;
+}
+
+.ProfileLI{
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectTecher {
+  margin-top: -10px;
+  width: 150px;
+  height: 40px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.selectTecher:focus {
+  outline: none;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.optionTeacher {
+  font-size: 16px;
+  color: #333;
+}
+
+.optionTeacher:hover {
+  background-color: #f1f1f1;
+}
+
+.codeMainDiv{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#codeDiv {
+  margin-top: 25px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ widows: 250px;
+}
+
+
+.list{
+  list-style: none;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 0 0 5px 5px;
+}
+
+.list-items{
+  padding: 10px 5px;
+}
+
+ .rightSideProfile{
+
+  flex:1;
+margin-left: 50px;
+}
+
+ .ImageSpanDiv{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 80px;
+ }
+
+
+ .circle-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.circle-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.clickSpanImage{
+  font-size: 13px;
+}
+
+
+.imageTypeError{
+  font-size: 13px;
+  font-weight: 800;
+  color: red;
+}
+.updateSelectDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.updateSelecetDivOptions{
+  margin-top: 20px;
+}
+
+footer{
+  text-align: center;
+  margin-top: 120px;
+  color: #aaa;
+}
+
+.footerDiv{
+  border-top: 1px solid black;
+
+
+}
+
+.footerUL{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+.footerLI{
+  padding-right: 25px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+}
+
+.h2Master{
+  font-family: 'Poppins', sans-serif;
+  color:#3B5998;
+
+}
+
+.h4Master {
+  color:#262525;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+}
+
+.languageArray{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.flags{
+  width: 180px;
+  display: flex;
+  height: 60px;
+  border: solid black 1px;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-top: 10px;
+
+}
+.flag{
+  display: flex;
+  width: 70px;
+  border: none;
+}
+
+.flag img{
+  width: 70px;
+  text-decoration: none;
+  border: none;
+
+}
+
+.flagText{
+  width: 80px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 70px;
+}
+
+.language{
+  display: flex;
+ justify-content: center;
+ margin-left: 20px;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  height: 30px;
+}
+
+.list-items{
+  margin-top: 0;
+  font-size: 12px;
+}
+.list-items-languages{
+  margin-top: 0px;
+  font-size: 12px;
+}
+
+.languagelist{
+  margin-top: -40px;
+}
+
+
+.updateDivMain{
+  display: flex;
+  flex-wrap: wrap;
+  }
+
+.leftDiv{
+  display: flex;
+  flex: 1;
+    }
+    
+.rightDiv{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+    }
+
+.ChooseLanguageDiv{
+  font-size: 14px;
+  margin-top:100px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.languageInput{
+  width: 250px;
+}
+
+.ChooseTeachLanguageDiv{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ChooseTeachLanguageDiv{
+  display: flex;
+  justify-content: space-around;
+  font-size: 14px;
+  margin-top:80px;
+}
+.TeacherLeftSideMain{
+  display: flex;
+  flex-direction: column;
+
+  }
+.TeacherLeftSideTop{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.TeacherLeftSideBottom{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+    
+.TeacherLeftSideBottomButton button{
+  cursor: pointer;
+  width: 200px;
+}
+.TeacherLeftSide{
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 50px;
+  align-items: center;
+}
+
+.TeacherLeftSideDIV h4{
+text-align: center;}
+
+.teacherPresentation{
+  display: flex;
+  flex-direction: column;
+ 
+}
+.teacherPresentationDIV H4{
+  text-align: center;
+}
+.teacherPresentationTextarea{
+
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.teacherPresentationTextarea textarea{
+  width: 100%;
+  min-width: 450px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+}
+
+
+.middlePageMain{
+  display: flex;
+  flex:2;
+ 
+}
+
+.middleTeacherPage{
+
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonsTeach{
+  display: flex;
+  align-items: center;
+  flex:0.5;
+  margin-top: 30px;
+  flex-direction: column;
+}
+
+.buttonsTeachPresentation{
+  display: flex;
+  justify-content: center;
+
+}
+.buttonsTeachPresentation button{
+  cursor: pointer;
+ width: 200px;
+}
+
+.buttonsTeachTax{
+  display: flex;
+  margin-top: -10px;
+  margin-bottom: 100px;
+  }
+.buttonsTeachTax button{
+  cursor: pointer;
+  width: 200px;
+   }
+
+   .input-container {
+    position: relative;
+  }
+  
+  .currency-symbol {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+  }
+  
+  .teacherTax {
+    padding-left: 30px;
+  }
+  
+
+.policies{
+  margin-top: 30px;
+}
+
+.languageTeachInput{
+  width: 250px;
+}
+
+.updateLanguagesDiv{
+margin-top: 5px;
+
+}
+
+.updateLanguagesDivLI{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  width: 250px;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: rgb(242, 231, 231);
+
+}
+
+.liTag{
+  margin-top: 3px;
+  margin-left: 20px;
+}
+
+.updateLanguagesTeachDiv{
+  margin-top: 5px;
+
+}
+
+.updateLanguagesTeachDivLI{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  width: 250px;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: rgb(242, 231, 231);
+}
+
+
+
+.deleteLanguage{
+display: flex;
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 12px;
+  font-weight: 400;
+ 
+}
+
+.deleteTeachLanguage{
+  display: flex;
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+
+.numberOfTeachers{
+  height: 30px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+
+
+
+.homeTeachers{
+  margin-top: 50px;
+  padding-bottom: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 220px;
+
+}
+
+.teacherBox{
+  margin-right: 20px;
+  margin-top: 10px;
+  display: flex;
+  padding: 15px;
+  flex-direction: column;
+  outline: 1px solid black;
+  width: 200px;
+  height: 280px;
+  border-radius: 20px;
+  border-top: 20px;
+
+}
+
+.teacherImage {
+
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+
+.teacherName{
+  margin-top: 5px;
+  text-align: center;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+}
+
+.teacherLanguage{
+  margin-top: 5px;
+  text-align: center;
+  font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+
+}
+
+.teacherPrice{
+  margin-top: 5px;
+font-weight: 800;
+text-align: center;
+font-family: 'Poppins', sans-serif;
+}
+
+
+.frequentlyQuestions{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.scrollingText{
+  border-radius: 5px;
+  background-color: white;
+  padding: 5px;
+  margin-top: 10px;
+  width: 600px;
+  max-height:180px;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+
+}
+
+.scrollingTextFirstLineText{
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.scrollingTextFirstLine{
+  display: flex;
+  justify-content: space-between;
+}
+
+.scrollingTextMainText {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+.arrowDiv {
+  transition: transform 0.5s ease-out;
+}
+
+
+.loginForm{
+  font-size: 14px;
+}
+
+
+.loginBtn{
+  cursor: pointer;
+  background-color: #3B5998;
+  color: white;
+}
+
+.cancelBtn{
+  cursor: pointer;
+  background-color: lightgray;
+  color: black;
+}
+
+.loginH2{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+}
+
+.loginH4{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.loginSpan{
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.alogin{
+  color: #3B5998;
+}
+.alogin:hover{
+  color: #3B5998;
+  font-weight: 600;
+}
+
+.policies{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.policiesText{
+  display: flex;
+  justify-content: baseline;
+  flex-direction: column;
+  background-color: #F8F8FF; 
+  color: #1E90FF; 
+  padding: 10px;
+  width: auto;
+  max-width: 800px;
+}
+
+.policiesBtn{
+  margin-top: 50px;
+}
+
+/* This media query targets screens with a maximum width of 768 pixels */
+@media only screen and (max-width: 868px) {
+  body {
+    margin-left: 30px;
+    overflow-x: hidden; /* Disable horizontal scrolling */
+  }
+  .smoothie {
+    display: none;
+  }
+  .leftSize {
+    display: none;
+  }
+  .greet {
+    display: none;
+  }
+  .middlePageMain{
+    flex-direction: column;
+  }
+}

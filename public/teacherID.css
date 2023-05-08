@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.mainTeacherID{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    position: relative;
+
+    }
+   
+.topTeacherID{
+   display: flex;
+    
+    }
+    
+.leftSideTeacherID{
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        border-radius: 5px;
+        margin-left: 20px;
+        margin-top: 50px;
+        width: 800px;
+        height: 200px;
+        background-color: #eeebeb;
+    
+        }
+    
+.imgDivTeacher{
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 60%;
+}
+    
+.imgDivTeacherCircle {
+        width: 120px;
+        height: 120px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 50%;
+    }
+    
+    .imgDivTeacherCircle img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 150%;
+        max-height: 150%;
+        object-fit: cover;
+    }
+
+.nameDivTeacher{
+    flex: 1.5;
+    }
+
+.nameDivTeacher h1 {
+    font-family: 'Poppins', sans-serif;
+    color: rgb(207, 105, 105);
+    -webkit-text-stroke: 0.1px black;
+    text-stroke: 2px black;
+
+}
+
+
+.teachingTeachID{
+    display: flex;
+    margin-top: 30px;
+    margin-left: 50px;
+    flex:1.5;
+    font-family: 'Poppins', sans-serif;
+
+}
+
+
+
+
+.rightSideTeacherID{
+    display: flex;
+    height: auto;
+    flex: 1;
+    flex-direction: column;
+    position: fixed;
+    right: 50;
+    margin-left: 100px;
+    margin-right: 100px;
+    }
+    
+    .rightContainer{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        top: 50px;
+        right: 120px;
+        width: 400px;
+        height: 400px;
+
+    
+    
+    }
+    
+
+    .iframeVideo{
+        display: flex;
+        height: 180px;
+        border-radius: 5px;
+    }
+
+    .player{
+   
+        border-radius: 10px;
+      
+    }
+    
+    
+    .textTeacherIDMainDiv {
+        border-radius: 5px;
+        margin-left: 20px;
+        margin-top: 50px;
+        display: flex;
+        background-color: #eeebeb;
+        max-width: 800px;
+      }
+      
+      .textTeacherID {
+        margin-left: 20px;
+        display: flex;
+        max-width: 800px;
+      }
+      
+      .pre {
+        max-width: 800px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-family: 'Poppins', sans-serif;
+        font-size: 15px;
+        
+      }
+      
+
+
+
+    .bookLesson{
+        margin-top: 50px;
+        width: 250px;
+        background-color: red;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-radius: 10px;
+        color: white;
+    }
+
+    .bookLesson h4{
+        text-align: center;
+        color: white;
+    }
+    
+@media only screen and (max-width: 1400px) {
+       
+    .rightContainer {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        position: static;
+        margin-top: 30px; /* or any other value you prefer */
+        width: 100%;
+        margin-bottom: 100px;
+        }
+      }

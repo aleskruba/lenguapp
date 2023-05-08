@@ -1,0 +1,308 @@
+<%- include('partials/header'); -%>
+
+<div class="walletMaindiv">
+    <div class="MyWallet">
+  <h2 class="Loginh2">How many Credits would you like to purchase?
+</h2>
+    </div>
+    <div class="amount">
+        <div class="square" data-value="50" id="1">$50</div>
+        <div class="square" data-value="100" id="2">$100</div>
+        <div class="square" data-value="150" id="3">$150</div>
+        <div class="square" data-value="200" id="4">$200</div>
+        <div class="square" data-value="250" id="5">$250</div>
+        <div class="square" data-value="300" id="6">$300</div>
+        <div class="square" data-value="350" id="7">$350</div>
+        <div class="square" data-value="400" id="8">$400</div>
+
+      </div>
+
+      <div class="chosenAmount">
+
+      </div>
+
+
+    <div class="bottomPaymentDiv" style="opacity:20%;pointer-events: none;" >     
+        <form class="credit-card">
+            <div class="front">
+              <div class="card-data-row">
+                <div class="brand-name">WDS Bank</div>
+                <img data-logo src="visa.svg" class="logo">
+              </div>
+              <fieldset class="form-group">
+                <legend>Card Number</legend>
+                <label for="cc-1">Card Number</label>
+                <div data-connected-inputs class="cc-inputs horizontal-input-stack">
+                  <input type="tel" maxlength="4" aria-label="Credit Card First 4 Digits" id="cc-1" required pattern="[0-9]{4}" />
+                  <input type="tel" maxlength="4" aria-label="Credit Card Second 4 Digits" required pattern="[0-9]{4}" />
+                  <input type="tel" maxlength="4" aria-label="Credit Card Third 4 Digits" required pattern="[0-9]{4}" />
+                  <input class="lastField" type="tel" maxlength="4" aria-label="Credit Card Last 4 Digits" required pattern="[0-9]{4}" />
+                </div>
+              </fieldset>
+              <div class="input-row">
+                <div class="form-group name-group">
+                  <label for="name">Name</label>
+                  <input type="text" id="name" required>
+                </div>
+                <fieldset class="form-group">
+                  <legend>Expiration</legend>
+                  <label for="expiration-month">Expiration</label>
+                  <div class="horizontal-input-stack">
+                    <select id="expiration-month" aria-label="Expiration Month" required>
+                      <option>01</option>
+                      <option>02</option>
+                      <option>03</option>
+                      <option>04</option>
+                      <option>05</option>
+                      <option>06</option>
+                      <option>07</option>
+                      <option>08</option>
+                      <option>09</option>
+                      <option>10</option>
+                      <option>11</option>
+                      <option>12</option>
+                    </select>
+                    <select id="expiration-year" aria-label="Expiration Year" required data-expiration-year></select>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+            <div class="back">
+              <div class="stripe"></div>
+              <div class="form-group cvc-group">
+                <label for="cvc">CVC</label>
+                <input class="cvc-input" type="tel" maxlength="3" id="cvc" required />
+              </div>
+            </div>
+          </form>
+
+
+     </div>
+  
+     <div class="bottomButtonDiv"> 
+        <button class="payButton" onCLick="savePayment()" disabled style="background-color:rgb(237, 229, 229); color: gray;">Pay</button>
+    </div>
+
+    <div class="success">
+
+    </div>    
+
+</div>
+
+<%- include('partials/footer'); -%>
+
+<script>
+    const squares = document.querySelectorAll('.square');
+    const chosenAmount= document.querySelector('.chosenAmount')
+    const amountText = document.createElement('h3')
+    const bottomPaymentDiv = document.querySelector('.bottomPaymentDiv')
+    
+    let amount;
+
+squares.forEach(square => {
+  square.addEventListener('click', () => {
+    // Remove the selected class from all squares
+    squares.forEach(s => s.classList.remove('selected'));
+    
+    // Add the selected class to the clicked square
+    square.classList.add('selected');
+    
+    amountText.textContent = `You choose ${square.dataset.value}`
+    chosenAmount.appendChild(amountText)
+    amount = square.dataset.value
+    payButton.disabled = false;
+    bottomPaymentDiv.style = "pointer-events: auto; opacity:100% "
+
+});
+});
+
+const success  = document.querySelector('.success')
+const text = document.createElement('h2')
+text.textContent = "transaction was succesfull"
+const btn = document.createElement('button')
+btn.classList.add('btn')  
+btn.setAttribute('onclick', 'redirectButton()');
+const spanBtn = document.createElement('span')
+spanBtn.textContent = "back to main page"
+btn.appendChild(spanBtn)
+
+function redirectButton(){
+    window.location.href = '/';
+}
+
+const formattedDate = moment().format('YYYY-MM-DD HH:mm:ss');
+
+
+async function savePayment(){
+
+      try {
+      const res = await fetch('/updateTransaction', {
+        method: 'POST',
+        body: JSON.stringify({ credits: amount, transaction:{date: formattedDate, description:'buying credits', amount:amount, completed:'completed'} }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      success.appendChild(text)
+        success.appendChild(btn)
+        payButton.disabled = true;
+        payButton.style = "background-color:rgb(237, 229, 229); color: gray"
+        bottomPaymentDiv.style = "pointer-events: none; opacity:50% "
+        setTimeout(()=>{
+          window.location.href = '/wallet';
+
+        })
+    } catch (error) {
+      console.log(error);
+    }
+}
+
+
+
+
+
+    const expirationSelect = document.querySelector("[data-expiration-year]")
+const logo = document.querySelector("[data-logo]")
+
+const currentYear = new Date().getFullYear()
+for (let i = currentYear; i < currentYear + 10; i++) {
+  const option = document.createElement("option")
+  option.value = i
+  option.innerText = i
+  expirationSelect.append(option)
+}
+
+document.addEventListener("keydown", e => {
+  const input = e.target
+  const key = e.key
+  if (!isConnectedInput(input)) return
+
+  switch (key) {
+    case "ArrowLeft": {
+      if (input.selectionStart === 0 && input.selectionEnd === 0) {
+        const prev = input.previousElementSibling
+        prev.focus()
+        prev.selectionStart = prev.value.length - 1
+        prev.selectionEnd = prev.value.length - 1
+        e.preventDefault()
+      }
+      break
+    }
+    case "ArrowRight": {
+      if (
+        input.selectionStart === input.value.length &&
+        input.selectionEnd === input.value.length
+      ) {
+        const next = input.nextElementSibling
+        next.focus()
+        next.selectionStart = 1
+        next.selectionEnd = 1
+        e.preventDefault()
+      }
+      break
+    }
+    case "Delete": {
+      if (
+        input.selectionStart === input.value.length &&
+        input.selectionEnd === input.value.length
+      ) {
+        const next = input.nextElementSibling
+        next.value = next.value.substring(1, next.value.length)
+        next.focus()
+        next.selectionStart = 0
+        next.selectionEnd = 0
+        e.preventDefault()
+      }
+      break
+    }
+    case "Backspace": {
+      if (input.selectionStart === 0 && input.selectionEnd === 0) {
+        const prev = input.previousElementSibling
+        prev.value = prev.value.substring(0, prev.value.length - 1)
+        prev.focus()
+        prev.selectionStart = prev.value.length
+        prev.selectionEnd = prev.value.length
+        e.preventDefault()
+      }
+      break
+    }
+    default: {
+      if (e.ctrlKey || e.altKey) return
+      if (key.length > 1) return
+      if (key.match(/^[^0-9]$/)) return e.preventDefault()
+
+      e.preventDefault()
+      onInputChange(input, key)
+    }
+  }
+})
+
+document.addEventListener("paste", e => {
+  const input = e.target
+  const data = e.clipboardData.getData("text")
+
+  if (!isConnectedInput(input)) return
+  if (!data.match(/^[0-9]+$/)) return e.preventDefault()
+
+  e.preventDefault()
+  onInputChange(input, data)
+})
+
+const lastField = document.querySelector('.lastField')
+const payButton = document.querySelector('.payButton')
+
+
+function onInputChange(input, newValue) {
+  const start = input.selectionStart
+  const end = input.selectionEnd
+  updateInputValue(input, newValue, start, end)
+  focusInput(input, newValue.length + start)
+  const firstFour = input.closest("[data-connected-inputs]").querySelector("input").value
+
+  if (firstFour.startsWith("4")) {
+    logo.src = "visa.svg"
+  } else if (firstFour.startsWith("5")) {
+    logo.src = "mastercard.svg"
+  }
+
+  if (lastField.value.length === 4) {
+    payButton.style = "background-color:gold"
+
+  }
+}
+
+
+
+
+
+function updateInputValue(input, extraValue, start = 0, end = 0) {
+  const newValue = `${input.value.substring(
+    0,
+    start
+  )}${extraValue}${input.value.substring(end, 4)}`
+  input.value = newValue.substring(0, 4)
+  if (newValue > 4) {
+    const next = input.nextElementSibling
+    if (next == null) return
+    updateInputValue(next, newValue.substring(4))
+  }
+}
+
+function focusInput(input, dataLength) {
+  let addedChars = dataLength
+  let currentInput = input
+  while (addedChars > 4 && currentInput.nextElementSibling != null) {
+    addedChars -= 4
+    currentInput = currentInput.nextElementSibling
+  }
+  if (addedChars > 4) addedChars = 4
+
+  currentInput.focus()
+  currentInput.selectionStart = addedChars
+  currentInput.selectionEnd = addedChars
+}
+
+function isConnectedInput(input) {
+  const parent = input.closest("[data-connected-inputs]")
+  return input.matches("input") && parent != null
+}
+  </script>

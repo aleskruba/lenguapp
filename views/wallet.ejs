@@ -1,0 +1,66 @@
+<%- include('partials/header'); -%>
+
+<div class="walletMaindiv">
+    <div class="MyWallet">
+  <h2 class="Loginh2">My Wallet</h2>
+    </div>
+
+    <div class="bottomDiv">     
+    
+     <div class="myBalanceDivLeft">
+        <div class="myBalanceText">
+            My Balance
+        </div>
+        <div class="myBalanceAmount">
+            $ <%= user.credits %>
+        </div>
+      
+        <div class="myBalanceButton">
+            <a href="/payment"><button>Buy Credits</button> </a>
+       </div>
+
+     </div>
+  
+     <div class="myBalanceDiv">
+        <div class="myBalanceText">
+            My Transaction
+        </div>
+        <div class="myBalanceAmount">
+          <div class="table-wrapper">
+            <table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Description	</th>
+                    <th>Amount (USD)</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% user.transaction.sort(function(a, b) {
+                      return moment(b.date) - moment(a.date);
+                    }).forEach(function(element) { %>
+                    <tr>
+                      <td><%= moment(element.date).format('YYYY-MM-DD HH:mm') %></td>
+                      <td><%= element.description %></td>
+                      <td><%= element.amount %></td>
+                      <td><%= element.completed %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+                
+              </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<%- include('partials/footer'); -%>
+
+
+
+

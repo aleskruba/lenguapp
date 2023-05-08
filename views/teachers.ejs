@@ -1,0 +1,362 @@
+<%- include('partials/header'); -%>
+<script async src="https://www.youtube.com/player_api"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<div class="TeacherMainDiv">
+    <div class="findTeacher">
+        <h2 class="Loginh2">Find your Teacher</h2>
+    </div>
+    <div class="teacherFilter">
+        <ul class="mainUl">
+          
+            <li>
+              <div class="input-container">
+              <input type="text" name="language" id="languageInput"  class="LanguageInput"placeholder="Language" autocomplete="off" value="">
+                <span id="suggestion"></span>       
+              </div>
+              </li>
+              
+               <li class="teacher">
+                 <a>Teacher</a>
+                 <ul class="teacher-menu">
+                    <li id="ProfessionalTeacher" class="teacher-menuLI" data-value="Teacher">Professional teacher</li>
+                    <li id="Tutor" data-value="Tutor">Tutor</li>
+
+                    
+                 </ul>
+          </li>    
+            <li class="lessons">
+                <a>Lesson Price</a>
+                <ul class="lessons-menu">
+                    <li><div class="rangeDiv">
+                        <div class="wrapper">
+                            <div class="values">
+                                <span id="range1"> 
+                                    0
+                                </span>
+                                <span> &dash;</span>
+                                <span id="range2"> 
+                                    30
+                                </span>
+                            </div>
+                            <div class="sliderContainer">
+                                <div class="slider-track"></div>
+                    
+                                <input type="range" min="0" max="30" value="5" id="slider-1" oninput="slideOne()"> 
+                                <input type="range" min="0" max="30" value="30" id="slider-2" oninput="slideTwo()"> 
+                            </div>
+                        </div>
+                    </div>
+                    </li>
+                 </ul>
+            
+            </li>
+        </ul>
+    </div>
+
+    <div class="teachersList">
+
+    </div>
+
+
+
+</div>
+
+<script>
+
+const ProfessionalTeacher = document.querySelector('#ProfessionalTeacher')
+const Tutor = document.querySelector('#Tutor')
+
+const enterKey = 13
+  
+  window.onload = () => {
+    languageInput.value = "";
+    clearSuggestion()
+}
+
+const clearSuggestion = () => {
+    suggestion.innerHTML = "";
+}
+
+const caseCheck = (word) => {
+    word = word.split("")
+ 
+    let inp = languageInput.value;
+
+    for (let i in inp) {
+        if (inp[i] == word[i]){
+            continue;
+        } else if (inp[i].toUpperCase() == word[i]) {
+            word.splice(i,1,word[i].toLowerCase());
+        }else{
+            word.splice(i,1,word[i].toUpperCase())
+        }
+    }
+    return word.join("")
+}
+
+let languagesArray = [];
+
+fetch('languages.json')
+.then(response => response.json())
+.then(data => {
+  const Langarr = data.languages;
+  const languageInput = document.getElementById("languageInput");
+
+  for (let data of Langarr){
+    languagesArray.push(data.name)
+  
+  }
+
+  languageInput.addEventListener("input", e=> {
+    clearSuggestion();
+
+
+    let regex = new RegExp("^" + languageInput.value, "i");
+    
+    for (let i in languagesArray){
+
+        if  (regex.test(languagesArray[i]) && languageInput.value != ""){
+          languagesArray[i] = caseCheck(languagesArray[i])
+
+            suggestion.innerHTML = languagesArray[i]
+
+            break;
+        }
+     }
+});
+  
+
+})
+
+ 
+
+
+const languageListFilter = document.querySelector('.languageListFilter');
+const teachersList = document.querySelector('.teachersList');
+let teacherArray = [];
+
+try {
+  fetch('/teachersdata')
+    .then(res => res.json())
+    .then(data => {
+      teacherArray = data.teachers;
+      processTeachers(teacherArray);
+    });
+} catch (err) {
+  console.log(err);
+}
+
+
+const slider1 = document.getElementById('slider-1');
+const slider2 = document.getElementById('slider-2');
+const languageInput = document.querySelector('.languageInput');
+
+function processTeachers(teacherArray) {
+  function onPlayerStateChange(event) {
+    const playerDiv = event.target.getIframe().parentNode;
+    const data = event.data;
+    switch (data) {
+      case YT.PlayerState.PLAYING:
+        window.parent.postMessage({
+          event: 'playerStateChange',
+          data: 'playing',
+        }, 'https://localhost:3000');
+        break;
+      case YT.PlayerState.PAUSED:
+        window.parent.postMessage({
+          event: 'playerStateChange',
+          data: 'paused',
+        }, 'https://localhost:3000');
+        break;
+    }
+  }
+
+  let suggestion = document.getElementById("suggestion")
+  languageInput.addEventListener('input', updateTeachersList);
+
+ let TeachValue;
+
+  function updateTeachersList() {
+
+  const minTax = parseInt(slider1.value);
+  const maxTax = parseInt(slider2.value);
+  const lang = languageInput.value.toLowerCase();
+
+  
+    
+  let filteredTeachers = teacherArray.filter(teacher => {
+    const tax = parseInt(teacher.tax);
+    const teachLang = teacher.teachlang.map(lang => lang.toLowerCase());
+    console.log('update ',TeachValue)
+
+    return  tax >= minTax && tax <= maxTax && (lang === '' || teachLang.some(tl => tl.startsWith(lang))) ;
+  });
+
+
+ 
+  if (lang === '') {
+    filteredTeachers = teacherArray.filter(teacher => {
+      const tax = parseInt(teacher.tax);
+      return tax >= minTax && tax <= maxTax;
+    });
+  }
+
+ 
+
+  let html = '';
+  window.postMessage(null, 'https://localhost:3000');
+  console
+  filteredTeachers.forEach(teacher => {
+
+    html += `
+      <div class="profileTeacherList">
+        <div class="box">
+          <div class="leftSide">
+            <div class="imageDiv">
+              <div class="imageDivCircle">
+                <img src="${teacher.profile}" alt="">
+              </div> 
+            </div>
+            <div class="ranking">
+              *****
+            </div>
+            <div class="LessnonsSumber">
+              120 lessons
+            </div>
+          </div>
+          <div class="rightSide">
+            <div class="name">
+              <div>${teacher.firstName}</div>
+              <div class="nametaxt">$ ${teacher.tax} <span class="nametaxtSpan">/Hour</span></div>
+            </div> 
+            <div class="tutor">
+              ${teacher.teacherType}
+            </div>
+            <div class="teachLanguages">
+              Teaching : ${teacher.teachlang}
+            </div>
+            <div class="about">
+              ${teacher.profileText}
+            </div>
+            <div class="bottom">
+              <div class="price">
+
+              </div>
+              <div class="button">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="player" id="${teacher.profileVideo}">
+          <iframe class='iframeVideo'
+            src="https://www.youtube.com/embed/${teacher.profileVideo}" 
+            frameborder="0" 
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" 
+            allowfullscreen="true"
+            mute
+          ></iframe>
+        </div> 
+
+      </div>
+    `;
+  });
+  teachersList.innerHTML = html;
+}
+
+  updateTeachersList();
+
+  
+languageInput.addEventListener("keydown", e=>{
+    if(e.keyCode == enterKey && suggestion.innerText != ""){
+        e.preventDefault()
+        input.value = suggestion.innerText;
+        clearSuggestion();
+
+    }
+})
+
+slider1.addEventListener('input', updateTeachersList);
+slider2.addEventListener('input', updateTeachersList);
+
+ProfessionalTeacher.addEventListener('click', function() {
+  
+  TeachValue = 'Teacher';
+  console.log(TeachValue) 
+  updateTeachersList();
+});
+
+Tutor.addEventListener('click', function() {
+  
+  TeachValue = 'Tutor';
+  console.log(TeachValue)
+  updateTeachersList();
+});
+
+
+const playerDivs = document.querySelectorAll('.player');
+  playerDivs.forEach((playerDiv) => {
+    const iframe = playerDiv.querySelector('iframe');
+    const videoId = iframe.getAttribute('src').split('/')[4];
+    const player = new YT.Player(iframe, {
+      videoId,
+      events: {
+        'onStateChange': onPlayerStateChange,
+      },
+    });
+  });
+}
+
+
+
+//////////////////////////////////// range slider 
+window.onload = function(){
+    slideOne();
+    slideTwo();
+
+}
+
+let sliderOne = document.getElementById('slider-1')
+let sliderTwo = document.getElementById('slider-2')
+let displayValOne = document.getElementById('range1')
+let displayValTwo = document.getElementById('range2')
+let minGap = 10;
+let sliderTrack = document.querySelector(".slider-track")
+let sliderMaxValue = document.getElementById("slider-1").max;
+
+function slideOne(){
+    if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+        sliderOne.value = parseInt(sliderTwo.value) - minGap
+    }
+    displayValOne.textContent = sliderOne.value
+    fillColor();
+}
+
+function slideTwo(){
+    if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+        sliderTwo.value = parseInt(sliderOne.value) + minGap
+    }
+    displayValTwo.textContent = sliderTwo.value
+    fillColor();
+}
+
+function fillColor(){
+    percent1 =  (sliderOne.value / sliderMaxValue) * 100;
+    percent2 =  (sliderTwo.value / sliderMaxValue) * 100;
+    sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}%, #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`
+}
+
+
+
+
+    // Replace these videoIds with your own videoIds
+
+
+  
+
+</script>
+
+
+<%- include('partials/footer'); -%>

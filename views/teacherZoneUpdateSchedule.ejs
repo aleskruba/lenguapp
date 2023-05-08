@@ -1,0 +1,351 @@
+<%- include('partials/header'); -%>
+
+<div class="mainSlotDiv">
+
+    <h2>Create your schedule slots </h2>
+
+    <div class="calednarDiv">
+        <div id="calendar-container"></div>
+    </div>
+
+
+    <div class="saveButton">
+
+      <div class="saveButtonClassSchedule" style="display:none" onclick="saveDates()">
+
+            <h4>save </h4>
+   
+        </div>
+        
+        <div class="cancelButtonClassSchedule" style="display:none" onclick="location.assign('/teacherzoneupdate')">
+        <h4>cancel </h4> 
+        </div>
+
+    </div>
+  
+
+
+  </div>
+
+
+<%- include('partials/footer'); -%>
+
+<script>
+  let isSelected = false; 
+  datesArray=[]
+  const now = moment();
+  const today = moment();
+  
+  // Frontend code for fetching teachingSlots data
+  try {
+    fetch('/getTeachingSlots')
+      .then(response => response.json())
+      .then(data => {
+        for (let dates in data.teachingSlots ){
+                datesArray.push(data.teachingSlots[dates])
+          }
+      
+        console.log('datesArray: ',datesArray)
+        
+        const calendar = (containerEl) => {
+      let selectedDate = null;
+      let currentMonth = moment();
+      
+      const renderCalendar = () => {
+  const startOfMonth = moment(currentMonth).startOf('month');
+  const endOfMonth = moment(currentMonth).endOf('month');
+  const daysInMonth = endOfMonth.date();
+
+  const monthName = currentMonth.format('MMMM');
+  const year = currentMonth.format('YYYY');
+
+  const calendarHeader = `
+    <div class="calendar-header">
+      <button id="prev-month">&lt;</button>
+      <div class="monthName">${monthName} ${year}</div>
+      <button id="next-month">&gt;</button>
+    </div>
+  `;
+
+  const calendarDays = `
+    <div class="calendar-days">
+      <div class="calendar-day">Sun</div>
+      <div class="calendar-day">Mon</div>
+      <div class="calendar-day">Tue</div>
+      <div class="calendar-day">Wed</div>
+      <div class="calendar-day">Thu</div>
+      <div class="calendar-day">Fri</div>
+      <div class="calendar-day">Sat</div>
+    </div>
+  `;
+
+  const calendarDates = [];
+  let cells = [];
+
+  for (let date = moment(startOfMonth); date.isSameOrBefore(endOfMonth, 'day'); date.add(1, 'day')) {
+
+    const day = date.date();
+    const isToday = date.isSame(moment(), 'day');
+    const isSelected = date.isSame(selectedDate, 'day');
+    const isPast = date.isBefore(today, 'day') || date.isSame(today, 'day');
+
+    // Define hoursArray within the function
+    const hoursArray = [];
+    for (let hour = 0; hour < 24; hour++) {
+      const unixTimestamp = moment(date).hour(hour).unix() * 1000;
+      hoursArray.push(unixTimestamp);
+    }
+    const matchingHours = hoursArray.filter(hour => datesArray.includes(String(hour)));
+
+    if (date.date() === 1) {
+      // Add empty cells for days before the first day of the month
+      const emptyCells = date.day();
+      for (let i = 0; i < emptyCells; i++) {
+        cells.push(`
+          <div class="calendar-date calendar-date-empty"></div>
+        `);
+      }
+    }
+
+    cells.push(`
+      <div
+        class="calendar-date${isToday ? ' calendar-date-today' : ''}${isSelected ? ' calendar-date-selected' : ''}${matchingHours.length && !isPast ? ' calendar-date-includesCheckeHours ' : ''}${isPast ? ' calendar-date-past' : ''}${isToday ? ' calendar-date-disabled' : ''}"
+        data-date="${date.format('YYYY-MM-DD')}"
+        ${isToday ? 'disabled' : ''}
+      >
+        ${day}
+      </div>
+    `);
+
+    if (date.day() === 6 || day === daysInMonth) {
+      calendarDates.push(`<div class="calendar-row">${cells.join('')}</div>`);
+      cells = [];
+    }
+  }
+
+  const calendarDatesHtml = calendarDates.join('');
+
+  const calendarHtml = `
+    <div class="calendar">
+      ${calendarHeader}
+      ${calendarDays}
+      ${calendarDatesHtml}
+    </div>
+  `;
+
+
+
+
+    containerEl.innerHTML = calendarHtml;
+    containerEl.querySelectorAll('.calendar-date').forEach((dateEl) => {
+      dateEl.addEventListener('click', () => {
+        const date = moment(dateEl.getAttribute('data-date'));
+        if (date.isAfter(moment(), 'day')) {
+          selectedDate = date;
+          renderCalendar();
+
+      
+            // Create a new container for the 24-hour schedule
+            const scheduleContainer = document.createElement('div');
+            scheduleContainer.classList.add('schedule-container');
+            containerEl.appendChild(scheduleContainer);
+      
+            // Create a string with 24 time slots for the schedule
+         // Create a string with 24 time slots for the schedule
+         let scheduleHtml = '<div class="schedule-header">Select a time slot:</div>';
+         let amScheduleHtml = '';
+         let pmScheduleHtml = '';
+         for (let i = 0; i < 24; i++) {
+
+          const timeSlotStart = moment({ hour: i });
+           const timeSlotEnd = moment({ hour: i + 1 });
+           const isPast = timeSlotStart.isBefore(moment(), 'hour');
+           isSelected = false; // You could add logic to check if this time slot is currently selected
+           const utcDateTime = moment.utc(date.format('YYYY-MM-DD') + ' ' + timeSlotStart.format('HH:mm')).valueOf();
+
+           datesArray.map(m=>{ 
+            if (m == utcDateTime) { isSelected = true;}
+          }
+            )
+         
+           const timeSlotHtml = `
+              <div class="schedule-time-slot${isSelected ? ' schedule-time-slot-selected' : ''}${isPast ? ' schedule-time-slot-past' : ''}"
+                data-date="${date.format('YYYY-MM-DD')}" data-time="${timeSlotStart.format('HH:mm')}" utc-date-time="${utcDateTime}">
+                ${timeSlotStart.format('h A')} - ${timeSlotEnd.format('h A')}
+              </div>
+            `;
+
+       
+                 // Select the div with the specific utcDateTime attribute
+         
+
+           if (i < 12) {
+             amScheduleHtml += timeSlotHtml;
+           } else {
+             pmScheduleHtml += timeSlotHtml;
+           }
+         }
+         
+         // Set the inner HTML of the new container to the schedule HTML
+         scheduleHtml += `
+           <div class="schedule-columns">
+             <div class="schedule-column1">${amScheduleHtml}</div>
+             <div class="schedule-column2">${pmScheduleHtml}</div>
+           </div>
+         `;
+         
+      
+            // Set the inner HTML of the new container to the schedule HTML
+            scheduleContainer.innerHTML = scheduleHtml;
+          
+
+            // Add click event listeners to each time slot
+            scheduleContainer.querySelectorAll('.schedule-time-slot').forEach((timeSlotEl) => {
+             
+             
+
+       
+             
+
+   
+
+          //    datesArray.map(m=>{ 
+     
+            //////   HERE  IS EVENT LISTENER //////
+              let toggleButton ;
+              timeSlotEl.addEventListener('click', () => {
+                console.log(timeSlotEl)
+
+                const selectedTimeSlotEl = scheduleContainer.querySelector('.schedule-time-slot-selected');
+             
+
+
+
+                const date = moment(timeSlotEl.getAttribute('data-date'));
+                const time = moment(timeSlotEl.getAttribute('data-time'), 'HH:mm');
+                const dateTime = moment({ year: date.year(), month: date.month(), date: date.date(), hour: time.hour(), minute: time.minute() });
+                const dateTimePlusOneHour = dateTime.clone().add(1, 'hour');
+                const formattedDateTimeOneHour = dateTimePlusOneHour.local().format('MMMM D, YYYY h:mm A');
+           
+
+                      // console.log(`Selected date and time slot: ${dateTime.format('MMMM D, YYYY h:mm A')} -${formattedDateTimeOneHour} `);
+                
+            
+                const dateTimeslot1 = dateTime.valueOf();
+
+                    const utcDateTime = moment.utc(date.format('YYYY-MM-DD') + ' ' + time.format('HH:mm')).valueOf();
+                    console.log('datetime: ',dateTime.format('MMMM D, YYYY h:mm A') )
+                    console.log('utc: ',utcDateTime)
+
+
+                  if (datesArray.includes(utcDateTime.toString())) 
+                    {  timeSlotEl.classList.remove('schedule-time-slot-selected'); 
+                     const index = datesArray.indexOf(utcDateTime.toString());
+                      datesArray.splice(index, 1);
+                      console.log(datesArray)
+                    }
+                 else {
+                    timeSlotEl.classList.add('schedule-time-slot-selected');
+                    datesArray.push(utcDateTime.toString())
+                    console.log(datesArray)
+                  }
+               
+      
+                const saveButtonClass = document.querySelector('.saveButtonClassSchedule');
+                saveButtonClass.style.display = "flex";
+
+
+
+                const cancelButtonClass = document.querySelector('.cancelButtonClassSchedule');
+                cancelButtonClass.style.display = "flex";
+
+        
+                const utcMoment = moment.utc(dateTimeslot1);
+               
+                const localMoment = utcMoment.local();
+                const formattedDateTime = localMoment.format('MMMM D, YYYY h:mm A');
+                
+                // Log the result to the console
+        //        console.log(`Formatted date and time: ${formattedDateTime}`);
+
+
+        
+            });
+
+          })
+
+
+
+
+
+
+
+      //      });
+          }
+        });
+        
+      });
+      
+      
+
+
+
+
+
+      const prevMonthBtn = containerEl.querySelector('#prev-month');
+      prevMonthBtn.addEventListener('click', () => {
+        currentMonth.subtract(1, 'month');
+        renderCalendar();
+      });
+      
+      const nextMonthBtn = containerEl.querySelector('#next-month');
+      nextMonthBtn.addEventListener('click', () => {
+        currentMonth.add(1, 'month');
+        renderCalendar();
+      });
+    };
+  
+    renderCalendar();
+  };
+
+
+const calendarContainer = document.querySelector('#calendar-container');
+      const myCalendar = calendar(calendarContainer);
+
+      calendarContainer.addEventListener('dateSelected', (event) => {
+        console.log(event.detail);
+      });
+
+
+    });
+} catch (err) {
+  console.log(err);
+}
+
+
+
+
+function saveDates(){
+
+
+try {
+    const res =  fetch('/saveScheduleSlot', {
+        method: 'PUT',
+        body: JSON.stringify( {datesArray:datesArray} ),
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    }
+  catch (err) {
+  console.log('error', err);
+}
+
+  location.reload();
+    console.log('save')
+}
+ 
+
+
+
+
+</script>

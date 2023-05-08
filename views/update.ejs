@@ -1,0 +1,389 @@
+<%- include('partials/header'); -%>
+
+<div class="updateDivMain"> 
+  <div class="leftDiv">
+
+
+
+<form class="loginForm" autocomplete="off">
+  <h2 class="Loginh4">Update profile</h2>
+  
+  <label for="firstname">First Name</label>
+    <input type="text" name="firstname"  value="<%=user.firstName%>"  />
+
+  <label for="lastname">Last Name</label>
+    <input type="text" name="lastname" value="<%=user.lastName%>" />
+
+  <label for="country-input">Country:</label>
+    <input type="text"  id="input" name="country" class='countryInput' value="<%=user.country%>" >
+    <div class="country error"></div>
+    <ul class="list"> </ul>
+
+  <label for="phone">Phone</label>
+  <input type="text" name="phone" id="phoneInput" class='countryPhoneInput' value="<%=user.phone%>"   />
+  <div class="phone error"></div>
+  <ul class="phonelist"> </ul>
+
+ 
+
+  <div class="updateSelectDiv" >
+    <div>
+          <label for="teacher">Also a teacher</label>
+   </div>
+    <div class="updateSelecetDivOptions">
+      <select  class='selectTecher' name="teacher">
+        <% if (user.isTeacher=='YES') { %>
+          <option id="option" class="optionTeacher">YES</option>
+          <option id="option" class="optionTeacher">NO</option>
+        <% } else { %>
+        <option id="option" class="optionTeacher">NO</option>
+        <option id="option" class="optionTeacher">YES</option>
+        <% } %>
+          
+        </select>
+    
+</div>   
+</div>
+
+  <input type="submit" name="" class="loginBtn" id="" value="Update" style="margin-top: 60px;">  
+  <input type="button" name="" class="cancelBtn" id="" value="Cancel" style="margin-top: 10px;" onclick="location.assign('/profile')"> 
+ 
+</form>
+</div>
+
+<div class="rightDiv">
+    <div class="ChooseLanguageDiv" >
+      <div>
+      <h4 class="Loginh4">Which languages are you interested in learning? MAX 5</h4>
+      </div>
+      <div>
+        <input type="text" name="language" id="languageInput" class='languageInput' value="" placeholder="Enter max 5 languages here.
+        " autocomplete="off"/>
+        <div class="waitPlease"  style="display: none;">
+        <h5 >wait please .... </h5>
+        </div>
+        <div class="LanguagesDIV">
+          <ul> <div class="updateLanguagesDiv">
+            <% if (Array.isArray(user.learnlang)) { %>
+              <% user.learnlang.map((lang,index) => { %>
+                <% if (lang) { %> <div class="updateLanguagesDivLI" id="<%= index %>" > <li class="liTag"><%= lang %><span class="deleteLanguage">delete</span></li></div><% } %>
+              <% }) %>
+            <% } %>
+          </div> </ul>
+        </div>
+        <div class="language error"></div>
+        <ul class="languagelist"> </ul>
+      </div>
+    </div>
+    
+
+</div>
+
+</div>
+<%- include('partials/footer'); -%>
+
+
+<script>
+
+
+const languageInput= document.querySelector('.languageInput')
+const languagelist = document.querySelector('.languagelist')
+
+const myLanguagesArray = []
+const fetchLanguages = async() => {
+  try {
+    const response = await fetch('/getLanguage')
+      .then(data => data.json())
+      .then(res => myLanguagesArray.push(res.learnlang))
+      
+     if (myLanguagesArray[0].length == 5) {
+      languageInput.disabled = true;}
+    }
+             
+      catch (err) {
+    console.log('error', err);
+  }
+
+}
+fetchLanguages()
+
+
+document.addEventListener("click", function (event) {
+  const isClickInsideLanguageTeachlist = languageInput.contains(event.target);
+  if (!isClickInsideLanguageTeachlist) {
+    // Clicked outside the languageTeachlist, so hide the languageTeachlistDIV
+    languagelist.style.display = "none";
+  }else{
+    languagelist.style.display = "block";
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+
+
+const form = document.querySelector('form');
+const countryError = document.querySelector('.country.error');
+const phoneError = document.querySelector('.phone.error')
+const languageError = document.querySelector('.language.error');
+
+const countryInput = document.querySelector('.countryInput')
+const countryPhoneInput= document.querySelector('.countryPhoneInput')
+
+
+countryError.textContent = '';
+phoneError.textContent = ''
+;
+
+countryInput.addEventListener('click',()=>{
+  countryError.textContent = '';
+  phoneError.textContent = '';
+})
+
+countryPhoneInput.addEventListener('click',()=>{
+  phoneError.textContent = '';
+  countryError.textContent = '';
+})
+
+languageInput.addEventListener('click',()=>{
+  phoneError.textContent = '';
+  countryError.textContent = '';
+  languageError.textContent = '';
+})
+
+let CountriesArray = [];
+let CountriesPhonesArray = [];
+
+fetch('countries.json')
+  .then(response => response.json())
+  .then(data => {
+    const arr = data.countries;
+    const input = document.getElementById("input");
+    const phoneInput = document.getElementById("phoneInput");
+
+    for (let data of arr){
+      CountriesArray.push(data.name)
+      CountriesPhonesArray.push(data.dial_code)
+   }
+      
+      function displayNames(value) {
+      input.value = value;
+      removeElements();
+    }
+
+    function displayPhones(value) {
+      phoneInput.value = value;
+      removePhoneElements();
+    }
+
+    input.addEventListener("keyup", e => {
+      removeElements();
+
+      for (let i of arr) {
+        if (i.name.toLowerCase().startsWith(input.value.toLowerCase()) && input.value !== "") {
+          const listItem = document.createElement("li");
+          listItem.classList.add("list-items");
+          listItem.style.cursor = "pointer";
+          listItem.addEventListener("click", () => displayNames(i.name));
+          const word = "<b>" + i.name.substr(0, input.value.length) + "</b>" + i.name.substr(input.value.length);
+          listItem.innerHTML = word;
+          document.querySelector(".list").appendChild(listItem);
+        }
+      }
+    });
+
+    phoneInput.addEventListener("keyup", e => {
+      removePhoneElements();
+
+      for (let i of arr) {
+        if (i.dial_code.toLowerCase().startsWith(phoneInput.value.toLowerCase()) && phoneInput.value !== "") {
+          const listItemPhone = document.createElement("li");
+          listItemPhone.classList.add("list-items-phones");
+          listItemPhone.style.cursor = "pointer";
+          listItemPhone.addEventListener("click", () => displayPhones(i.dial_code));
+          const word = "<b>" + i.dial_code.substr(0, phoneInput.value.length) + "</b>" + i.dial_code.substr(phoneInput.value.length);
+          listItemPhone.innerHTML = word;
+          document.querySelector(".phonelist").appendChild(listItemPhone);
+        }
+      }
+    });
+
+    function removeElements() {
+      const items = document.querySelectorAll('.list-items');
+      items.forEach(item => item.remove());
+    }
+
+    function removePhoneElements() {
+      const phoneInput = document.querySelectorAll('.list-items-phones');
+      phoneInput.forEach(item => item.remove());
+    }
+  })
+  .catch(error => console.error(error));
+
+
+/////////////////////////////////    learning Languages
+  let languagesArray = [];
+
+  fetch('languages.json')
+  .then(response => response.json())
+  .then(data => {
+    const Langarr = data.languages;
+    const languageInput = document.getElementById("languageInput");
+  
+    for (let data of Langarr){
+      languagesArray.push(data.name)
+   }
+ 
+  async function displayNames(value) {
+        languageInput.value = value;
+
+     try {
+        const res = await fetch('/updateLanguage', {
+             method: 'POST',
+             body: JSON.stringify( {lang:value} ),
+             headers: { 'Content-Type': 'application/json' }
+         });
+  
+         }
+       catch (err) {
+       console.log('error', err);
+  }
+     
+      removeElements();
+      location.reload();
+
+    }
+
+  languageInput.addEventListener("keyup", e => {
+      removeElements();
+
+      for (let i of Langarr) {
+        if (i.name.toLowerCase().startsWith(languageInput.value.toLowerCase()) && languageInput.value !== "") {
+          const listItem = document.createElement("li");
+          listItem.classList.add("list-items-languages");
+          listItem.style.cursor = "pointer";
+          listItem.addEventListener("click", () =>  displayNames(i.name));
+          const word = "<b>" + i.name.substr(0, languageInput.value.length) + "</b>" + i.name.substr(languageInput.value.length);
+          listItem.innerHTML = word;
+          document.querySelector(".languagelist").appendChild(listItem);
+
+        }
+      }
+    });
+
+      function removeElements() {
+      const items = document.querySelectorAll('.list-items-languages');
+      items.forEach(item => item.remove());
+    }
+
+
+  })
+  .catch(error => console.error(error));
+
+  // This code assumes that the delete buttons have a class of "deleteLanguage"
+
+    const deleteButtons = document.getElementsByClassName('deleteLanguage');
+
+for (let i = 0; i < deleteButtons.length; i++) {
+  deleteButtons[i].addEventListener('click', () => {
+    const languageDiv = deleteButtons[i].parentElement.parentElement;
+    deleteLanguage(languageDiv.id);
+  });
+}
+
+    async function deleteLanguage(index) {
+      const languageDiv = document.getElementById(index);
+      const LanguagesDIV = document.querySelector('.LanguagesDIV')
+      const waitPlease = document.querySelector('.waitPlease')
+      LanguagesDIV.style = "display:none"
+      waitPlease.style = "display:block "
+      if (languageDiv) {
+        languageDiv.style = "display:none";
+
+        try {
+          
+          const res = await fetch('/deletelanguage', {
+              method: 'POST',
+              body: JSON.stringify( {index:languageDiv.id} ),
+              headers: { 'Content-Type': 'application/json' }
+        }); 
+              
+        location.reload();
+        }
+      catch (err) {
+        console.log('error', err);
+  }
+  }
+}
+
+
+
+
+
+
+form.addEventListener('submit', async function (event) {
+  event.preventDefault();
+  
+  const firstName = form.firstname.value;
+  const lastName = form.lastname.value;
+  const country = form.country.value;
+  const phone = form.phone.value;
+  const isTeacher = form.teacher.value;
+  const teacherType = 'Tutor'
+  
+  let isValidCountry = false;
+      for (let item of CountriesArray) {
+          if (CountriesArray.includes(country)) {
+          isValidCountry = true;
+          break;
+         }
+      }
+        if (!isValidCountry) {
+            countryError.textContent = 'wrong country';
+          return ;
+      }
+
+  let isValidCountryPhone = false;
+      const phoneReplaceValues = phone.replace(/[^0-9+]/g, '');
+ 
+        for (let item of CountriesPhonesArray) {
+            if (phoneReplaceValues.startsWith(item)) {
+              isValidCountryPhone = true;
+              break;
+            }
+          }
+          
+          if (!isValidCountryPhone || phoneReplaceValues.length < 12) {
+            phoneError.textContent = 'wrong dial code';
+            countryError.textContent = '';
+
+            return;
+     }
+
+
+
+  try {
+    const res = await fetch('/update', {
+      
+      method: 'PUT',
+      body: JSON.stringify({ firstName, lastName, country, phone, isTeacher,teacherType }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+     if (data.errors) {
+      emailError.textContent = data.errors.email;
+    }
+    else {
+      location.assign('/profile');
+    }
+  }
+  catch (err) {
+    console.log('error', err);
+  }
+});
+
+
+});
+</script>
+

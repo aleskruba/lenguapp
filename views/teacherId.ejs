@@ -1,0 +1,94 @@
+<%- include('partials/header'); -%>
+
+
+<div>
+    <div class="mainTeacherID">
+        <div class="rightSideTeacherID">
+          <div class="rightContainer">
+       
+                <div class="player" id="${teacher.profileVideo}">
+                  <iframe class='iframeVideo'
+                  src='https://www.youtube.com/embed/<%= teacher.profileVideo %>' 
+                  frameborder="0" 
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" 
+                  allowfullscreen="true"
+                  mute
+                ></iframe>
+                </div> 
+
+                
+           
+           
+                <div onclick="navigateToTeacher('<%= teacher.idUser %>/slot')" style="cursor: pointer;" class="bookLesson">
+                  <h4>Book lesson</h4>
+              </div>
+       
+             
+            </div>
+        </div>
+  
+        <div class="topTeacherID">
+          <div class="leftSideTeacherID">
+            <div class="imgDivTeacher">
+              <div class="imgDivTeacherCircle">
+                <img src="<%= teacher.profile %>" alt="">
+              </div>
+              
+            </div>
+           
+                <div class="nameDivTeacher">
+                    <h1><%= teacher.firstName %> <%= teacher.lastName.toUpperCase() %></h1>
+                    <p><%= teacher.teacherType %></p>
+                    <p><%= teacher.country %> </p>
+                </div>
+                <div class="teachingTeachID">
+                    <div class="teachingLeft">
+                      <p>teaching :</p> 
+                    </div>
+                    <div class="teachingRight">
+                        <% teacher.teachlang.forEach(function(country) { %>
+                            <p><%= country %></p>
+                          <% }); %>
+                    </div>
+                    
+                
+                
+                </div>
+           </div>  
+         
+  
+          </div>
+  
+            
+    </div>
+    <div class="textTeacherIDMainDiv">
+        <div class="textTeacherID">
+            <pre class="pre">
+                <%= teacher.profileText %>
+            </pre>
+        </div>
+    </div>
+
+    <div class="rankingTeacherIDMainDiv ">
+        <div class="rankingTeacherID">
+            <pre class="pre">
+            
+            </pre>
+        </div>
+    </div>
+  
+  </div>
+
+</div>
+
+
+<%- include('partials/footer'); -%>
+
+<script>
+        function navigateToTeacher(teacherId) {
+                  window.location.href = `/teachers/${teacherId}`;
+                }
+        
+</script>
+
+

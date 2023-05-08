@@ -1,0 +1,287 @@
+<%- include('partials/header'); -%>
+
+
+<div class="containerMAIN">
+    <div class="menu">
+      <ul class="ulList">
+        <li> <div class="input-container-Teacher">
+            <input type="text" placeholder="enter language" id="languageInputTeacher" class="languageInputTeacher">
+            <span id="suggestion"></span>
+            </div>
+         </li>
+        <li>Teacher Type
+          <select name="languages" id="" class="selectInput">
+            <option value="">Both</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Tutor">Tutor</option>
+          </select>
+        </li>
+            <li class="lessons">
+                <a>Lesson Price</a>
+                <ul class="lessons-menu">
+                    <li><div class="rangeDiv">
+                        <div class="wrapper">
+                            <div class="values">
+                                <span id="range1"> 
+                                    0
+                                </span>
+                                <span> &dash;</span>
+                                <span id="range2"> 
+                                    30
+                                </span>
+                            </div>
+                            <div class="container">
+                                <div class="slider-track"></div>
+                    
+                                <input type="range" min="0" max="30" value="5" id="slider-1" oninput="slideOne()"> 
+                                <input type="range" min="0" max="30" value="30" id="slider-2" oninput="slideTwo()"> 
+                            </div>
+                        </div>
+                    </div>
+                    </li>
+                 </ul>
+             </li>
+      </ul>
+    </div>
+  
+    <div class="results">
+      <div class="teachersList">
+
+      </div>
+      <div class="pagination"></div>
+    </div>
+  </div>
+
+  <%- include('partials/footer'); -%>
+  <script>
+
+    const languages = JSON.parse('<%- languages %>');
+    const languageInputTeacher = document.getElementById("languageInputTeacher");
+    const languagesArray = []
+    let suggestion = document.getElementById("suggestion")
+
+    const enterKey = 13
+  
+  window.onload = () => {
+    languageInputTeacher.value = "";
+    clearSuggestion()
+}
+
+const clearSuggestion = () => {
+    suggestion.innerHTML = "";
+}
+
+const caseCheck = (word) => {
+    word = word.split("")
+ 
+    let inp = languageInputTeacher.value;
+
+    for (let i in inp) {
+        if (inp[i] == word[i]){
+            continue;
+        } else if (inp[i].toUpperCase() == word[i]) {
+            word.splice(i,1,word[i].toLowerCase());
+        }else{
+            word.splice(i,1,word[i].toUpperCase())
+        }
+    }
+    return word.join("")
+}
+
+  for (let data of languages.languages){
+        languagesArray.push(data.name)
+  
+  }
+
+  languageInputTeacher.addEventListener("input", e=> {
+    clearSuggestion();
+
+
+    let regex = new RegExp("^" + languageInputTeacher.value, "i");
+    
+    for (let i in languagesArray){
+
+        if  (regex.test(languagesArray[i]) && languageInputTeacher.value != ""){
+          languagesArray[i] = caseCheck(languagesArray[i])
+
+            suggestion.innerHTML = languagesArray[i]
+
+            break;
+        }
+     }
+});
+  
+function navigateToTeacher(teacherId) {
+          window.location.href = `/teachers/${teacherId}`;
+        }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const results = document.querySelector('.results')
+      const selectInput = document.querySelector('.selectInput')
+      const pagination = document.querySelector('.pagination')
+      const slider1 = document.getElementById('slider-1');
+      const slider2 = document.getElementById('slider-2');
+  
+      let currentPage = 1
+      const itemsPerPage = 15
+  
+      fetch('/teachersdata')
+        .then(response => response.json())
+        .then(data => {
+          const teachers = data.teachers
+
+ 
+          const updateResults = () => {
+            let filteredTeachers = teachers.filter((teacher) => {
+              const teachLang = teacher.teachlang.map(lang => lang.toLowerCase())          
+              const type = teacher.teacherType ? teacher.teacherType.toLowerCase() : 'Tutor';
+              const tax = parseInt(teacher.tax);
+              const minTax = parseInt(slider1.value);
+              const maxTax = parseInt(slider2.value);
+              const lang = languageInputTeacher.value.toLowerCase();
+                     
+
+              return   teachLang.some(tl => tl.startsWith(lang)) &&  tax >= minTax && tax <= maxTax &&  
+              type.startsWith(selectInput.value.toLowerCase() )
+            })
+
+                
+            const getTotalPages = () => Math.ceil(filteredTeachers.length / itemsPerPage)
+
+            const totalPages = getTotalPages()
+  
+            pagination.innerHTML = ''
+  
+            for (let i = 1; i <= totalPages; i++) {
+              const button = document.createElement('button')
+              button.innerText = i
+              button.addEventListener('click', () => {
+                currentPage = i
+                updateResults()
+              })
+              pagination.appendChild(button)
+            }
+  
+            const startIndex = (currentPage - 1) * itemsPerPage
+            const endIndex = startIndex + itemsPerPage
+            const currentTeachers = filteredTeachers.slice(startIndex, endIndex)
+  
+            results.querySelector('.teachersList').innerHTML = ''
+            currentTeachers.forEach((teacher) => {
+              const ul = document.createElement('ul')
+  
+
+
+              let html = `
+              <div class="profileTeacherList">
+                <div class="box" onclick="navigateToTeacher('${teacher.idUser}')" style="cursor: pointer;">
+                <div class="leftSide">
+                    <div class="imageDiv">
+                    <div class="imageDivCircle">
+                      <img src="${teacher.profile}"alt="">
+                    </div> 
+                    </div>
+                    <div class="ranking">
+                    *****
+                    </div>
+                    <div class="LessnonsSumber">
+                    120 lessons
+                    </div>
+                </div>
+                <div class="rightSide">
+                    <div class="name">
+                    <div>${teacher.firstName}  ${teacher.lastName}</div>
+                    <div class="nametaxt">$ ${teacher.tax} <span class="nametaxtSpan">/Hour</span></div>
+                    </div> 
+                    <div class="tutor">
+                    ${teacher.teacherType}
+                    </div>
+                    <div class="teachLanguages">
+                    Teaching : ${teacher.teachlang}
+                    </div>
+                    <div class="about">
+                    ${teacher.profileText}
+                    </div>
+                    <div class="bottom">
+                    <div class="price">
+
+                    </div>
+                    <div class="button">
+
+                    </div>
+                    </div>
+                </div>
+        
+                </div>
+                
+           
+            </div>
+              `
+ 
+
+              ul.innerHTML = html
+              results.querySelector('.teachersList').appendChild(ul)
+            })
+          }
+       
+          languageInputTeacher.addEventListener('input', updateResults)
+          slider1.addEventListener('input', updateResults);
+          slider2.addEventListener('input', updateResults);
+          selectInput.addEventListener('change', updateResults)
+  
+          updateResults()
+        })
+    })
+
+
+    //////////////////////////////////// range slider 
+window.onload = function(){
+    slideOne();
+    slideTwo();
+
+}
+
+let sliderOne = document.getElementById('slider-1')
+let sliderTwo = document.getElementById('slider-2')
+let displayValOne = document.getElementById('range1')
+let displayValTwo = document.getElementById('range2')
+let minGap = 10;
+let sliderTrack = document.querySelector(".slider-track")
+let sliderMaxValue = document.getElementById("slider-1").max;
+
+function slideOne(){
+    if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+        sliderOne.value = parseInt(sliderTwo.value) - minGap
+    }
+    displayValOne.textContent = sliderOne.value
+    fillColor();
+}
+
+function slideTwo(){
+    if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+        sliderTwo.value = parseInt(sliderOne.value) + minGap
+    }
+    displayValTwo.textContent = sliderTwo.value
+    fillColor();
+}
+
+function fillColor(){
+    percent1 =  (sliderOne.value / sliderMaxValue) * 100;
+    percent2 =  (sliderTwo.value / sliderMaxValue) * 100;
+    sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}%, lightgray ${percent1}% , lightgray ${percent2}%, #dadae5 ${percent2}%)`
+}
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
